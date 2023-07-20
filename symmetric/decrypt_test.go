@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"reflect"
 	"testing"
 
 	"github.com/o1egl/paseto"
@@ -12,7 +13,6 @@ func TestDecrypt(t *testing.T) {
 	var newFooter string
 
 	token := Encrypt()
-	decode := newJSONToken.Get(token)
 
 	err := paseto.NewV1().Decrypt(token, symmetricKey, &newJSONToken, &newFooter)
 
@@ -27,13 +27,11 @@ func TestDecrypt(t *testing.T) {
 	/*
 	* Extract encrypted data
 	 */
-	fmt.Println("Audience:", newJSONToken.Audience)
-	fmt.Println("Expiration:", newJSONToken.Expiration)
-	fmt.Println("Issued:", newJSONToken.IssuedAt)
-	fmt.Println("Issuer:", newJSONToken.Issuer)
-	fmt.Println("JTI:", newJSONToken.Jti)
-	fmt.Println("Not Before:", newJSONToken.NotBefore)
-	fmt.Println("Subject:", newJSONToken.Subject)
-	fmt.Println("Claims:", decode)
+
+	a := reflect.ValueOf(newJSONToken)
+
+	for i := 0; i < a.NumField(); i++ {
+		fmt.Printf("Values: %v", a.Field(i))
+	}
 
 }
