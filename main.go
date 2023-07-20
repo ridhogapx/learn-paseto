@@ -8,25 +8,26 @@ import (
 )
 
 func main() {
-	symmetric := []byte("ROSE IS RED, VIOLET IS BLUE")
+	symmetricKey := []byte("YELLOW SUBMARINE, BLACK WIZARDRY") // Must be 32 bytes
 	now := time.Now()
 	exp := now.Add(24 * time.Hour)
 	nbt := now
 
 	jsonToken := paseto.JSONToken{
-		Audience:   "NPC",
-		Issuer:     "Developer",
+		Audience:   "test",
+		Issuer:     "test_service",
 		Jti:        "123",
-		Subject:    "Testing",
+		Subject:    "test_subject",
 		IssuedAt:   now,
 		Expiration: exp,
 		NotBefore:  nbt,
 	}
-
-	jsonToken.Set("data", "example of signed message")
+	// Add custom claim    to the token
+	jsonToken.Set("data", "this is a signed message")
 	footer := "some footer"
 
-	token, err := paseto.NewV2().Encrypt(symmetric, jsonToken, footer)
+	// Encrypt data
+	token, err := paseto.NewV1().Encrypt(symmetricKey, jsonToken, footer)
 
 	if err != nil {
 		panic(err)
