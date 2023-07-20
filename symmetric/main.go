@@ -7,8 +7,9 @@ import (
 	"github.com/o1egl/paseto"
 )
 
+var symmetricKey = []byte("ROSE IS RED, VIOLET IS BLUE, I'M BAD AT PROGRAMMING") // Must be 32 bytes
+
 func Encrypt() string {
-	symmetricKey := []byte("ROSE IS RED, VIOLET IS BLUE, I'M BAD AT PROGRAMMING") // Must be 32 bytes
 	now := time.Now()
 	exp := now.Add(24 * time.Hour)
 	nbt := now
