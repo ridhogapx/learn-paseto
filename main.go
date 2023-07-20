@@ -22,9 +22,9 @@ func main() {
 		Expiration: exp,
 		NotBefore:  nbt,
 	}
-	// Add custom claim    to the token
-	jsonToken.Set("data", "this is a signed message")
-	footer := "some footer"
+	// Add custom claim to the token
+	jsonToken.Set("data", "pesan rahasia")
+	footer := "Ini footer"
 
 	// Encrypt data
 	token, err := paseto.NewV1().Encrypt(symmetricKey, jsonToken, footer)
@@ -33,5 +33,16 @@ func main() {
 		panic(err)
 	}
 
-	fmt.Println(token)
+	// Decrypt Token
+	var newJsonToken paseto.JSONToken
+	var newFooter string
+
+	errs := paseto.NewV1().Decrypt(token, symmetricKey, &newJsonToken, &newFooter)
+
+	if errs != nil {
+		panic(errs)
+	}
+
+	fmt.Printf("Decrypt: %v", newJsonToken)
+	fmt.Printf("Footer: %v", newFooter)
 }
