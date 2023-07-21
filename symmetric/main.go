@@ -7,7 +7,7 @@ import (
 	"github.com/o1egl/paseto"
 )
 
-var symmetricKey = []byte("ROSE IS RED, VIOLET IS BLUE, I'M BAD AT PROGRAMMING") // Must be 32 bytes
+var symmetricKey = []byte("ROSE IS RED, VIOLET IS BLUE, I'M") // Must be 32 bytes
 
 func Encrypt() string {
 	now := time.Now()
@@ -28,7 +28,7 @@ func Encrypt() string {
 	footer := "Ini footer"
 
 	// Encrypt data
-	token, err := paseto.NewV1().Encrypt(symmetricKey, jsonToken, footer)
+	token, err := paseto.NewV2().Encrypt(symmetricKey, jsonToken, footer)
 
 	if err != nil {
 		panic(err)
@@ -39,5 +39,20 @@ func Encrypt() string {
 
 func main() {
 	token := Encrypt()
-	fmt.Println(token)
+
+	var j paseto.JSONToken
+	var footer string
+
+	err := paseto.NewV2().Decrypt(token, symmetricKey, &j, &footer)
+
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	fmt.Println(j)
+
+	marshall, _ := j.MarshalJSON()
+
+	fmt.Println(string(marshall))
+
 }
